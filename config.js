@@ -21,6 +21,18 @@ const PORTAL_CONFIG = {
       tags: ["OCI", "Cloud", "Ubuntu"]
     },
     {
+      id: "champdle",
+      title: "Champdle Game",
+      category: "Web App",
+      icon: "⚔️",
+      description: "오늘의 롤(LoL) 챔피언 맞추기 추리 게임",
+      port: 3100,
+      protocol: "http",
+      badge: "Game",
+      badgeColor: "purple",
+      tags: ["Nuxt.js", "FastAPI", "LoL"]
+    },
+    {
       id: "pokemantle",
       title: "Pokémantle Game",
       category: "Web App",
