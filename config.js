@@ -4,8 +4,8 @@
  */
 const PORTAL_CONFIG = {
   defaultOciIp: "129.225.197.60",
-  title: "Dev Workspace Portal",
-  subtitle: "Oracle Cloud Infrastructure & Microservices Hub",
+  title: "yeardayhour.hub",
+  subtitle: "Your ultimate playground on Oracle Cloud",
 
   services: [
     {
@@ -26,7 +26,7 @@ const PORTAL_CONFIG = {
       category: "Web App",
       icon: "⚔️",
       description: "오늘의 롤(LoL) 챔피언 맞추기 추리 게임",
-      port: 3100,
+      path: "/champdle/",
       protocol: "http",
       badge: "Game",
       badgeColor: "purple",
@@ -38,7 +38,7 @@ const PORTAL_CONFIG = {
       category: "Web App",
       icon: "🎮",
       description: "오늘의 포켓몬 맞추기 추리 게임 (Date/Puzzle 오버라이드 지원)",
-      port: 3000,
+      path: "/pokemantle/",
       protocol: "http",
       badge: "Game",
       badgeColor: "purple",
@@ -57,17 +57,40 @@ const PORTAL_CONFIG = {
       tags: ["Python", "FastAPI", "Uvicorn"]
     },
     {
-      id: "add-service",
-      title: "New Service Placeholder",
-      category: "Expansion",
-      icon: "🚀",
-      description: "추가될 새로운 도커 마이크로서비스 또는 웹 프로젝트",
-      port: null,
+      id: "strike",
+      title: "Strike Game",
+      category: "Web App",
+      icon: "🎲",
+      description: "주사위와 운으로 승부하는 짜릿한 스트라이크 보드게임 웹 이식판",
+      path: "/strike/",
       protocol: "http",
-      badge: "Coming Soon",
-      badgeColor: "gray",
-      tags: ["Docker", "Microservice"],
-      disabled: true
+      badge: "Game",
+      badgeColor: "amber",
+      tags: ["Vue3", "Vite", "BoardGame"]
+    },
+    {
+      id: "onecard",
+      title: "One Card Online",
+      category: "Web App",
+      icon: "🃏",
+      description: "실시간 멀티플레이어 원카드 게임! 친구들과 방을 파서 대결해보세요.",
+      path: "/onecard/",
+      protocol: "http",
+      badge: "New Game",
+      badgeColor: "red",
+      tags: ["Vue3", "Socket.IO", "Multiplayer"]
+    },
+    {
+      id: "lolsearch",
+      title: "LoLSearch",
+      category: "Web App",
+      icon: "🔍",
+      description: "리그오브레전드 프리미엄 소환사 전적검색 서비스",
+      path: "/lolsearch/",
+      protocol: "http",
+      badge: "Search",
+      badgeColor: "cyan",
+      tags: ["Express", "Riot API", "LoL"]
     }
   ]
 };

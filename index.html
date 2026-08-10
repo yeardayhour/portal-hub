@@ -3,50 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dev Workspace Portal | OCI Hub</title>
-  <meta name="description" content="Oracle Cloud Infrastructure 및 Pokémantle, Champdle, FastAPI 마이크로서비스 관문을 통합 지원하는 개발 허브 포털">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-  <link rel="stylesheet" href="styles.css">
+  <title>yeardayhour.hub | OCI Dashboard</title>
+  <meta name="description" content="Oracle Cloud Infrastructure & Microservices Dashboard">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+  <link rel="stylesheet" href="styles.css?v=2.0">
+  <!-- Phosphor Icons for sleek iconography -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-  <!-- Animated Background Glow Effects -->
+  <!-- Animated Background Matrix/Orbs -->
+  <div class="bg-mesh"></div>
   <div class="bg-orb bg-orb-1"></div>
   <div class="bg-orb bg-orb-2"></div>
-  <div class="bg-orb bg-orb-3"></div>
-
-  <div class="container">
-    <!-- Header Section -->
-    <header>
-      <div class="header-badge">
-        <span class="status-dot"></span>
-        OCI Cloud Server Active
+  
+  <div class="dashboard-container">
+    <!-- Top Widgets Row -->
+    <header class="top-widgets">
+      <div class="widget clock-widget bento-item">
+        <div class="clock-time" id="clock-time">00:00:00</div>
+        <div class="clock-date" id="clock-date">Loading date...</div>
       </div>
-      <h1 class="portal-title">Dev Workspace Portal</h1>
-      <p class="portal-subtitle">
-        Oracle Cloud Infrastructure와 마이크로서비스 프로젝트를 한곳에서 편리하게 연결하고 관리하는 전용 허브입니다.
-      </p>
+      
+      <div class="widget title-widget bento-item flex-col-center">
+        <h1 class="portal-title">yeardayhour<span class="highlight-text">.hub</span></h1>
+        <p class="portal-subtitle">Oracle Cloud Infrastructure Playground</p>
+      </div>
 
-      <!-- Auto-Detected Host Display Bar -->
-      <div class="ip-control-bar">
-        <span class="ip-control-label">🌐 Connected Host:</span>
-        <span id="current-host-display" class="host-display-badge">Detecting...</span>
+      <div class="widget status-widget bento-item">
+        <div class="status-header">
+          <i class="ph ph-cpu"></i> System Status
+        </div>
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span class="status-text">All Systems Operational</span>
+        </div>
+        <div class="host-display" id="current-host-display">Detecting host...</div>
       </div>
     </header>
 
     <!-- Services Grid -->
     <main>
-      <div id="cards-grid" class="cards-grid">
-        <!-- Dynamically rendered via script.js -->
+      <div class="section-title">
+        <i class="ph ph-rocket-launch"></i> Active Microservices
+      </div>
+      <div id="cards-grid" class="bento-grid">
+        <!-- Rendered via script.js -->
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-      <p>© 2026 Dev Workspace Hub. Built for OCI, Pokémantle & Champdle Services.</p>
+    <!-- Bottom Widgets -->
+    <footer class="bottom-widgets">
+      <div class="widget terminal-widget bento-item">
+        <div class="terminal-header">
+          <div class="term-dots"><span></span><span></span><span></span></div>
+          <div class="term-title">system.log</div>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="term-line">> Initializing yeardayhour.hub...</div>
+        </div>
+      </div>
     </footer>
   </div>
 
-  <script src="config.js?v=1.1"></script>
-  <script src="script.js?v=1.1"></script>
+  <script src="config.js?v=1.2"></script>
+  <script src="script.js?v=2.0"></script>
 </body>
 </html>
