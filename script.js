@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // Guestbook System (방명록 & 비밀번호 삭제 기능)
+  // Guestbook System (글로벌 실시간 API 연동 & 비밀번호 삭제 기능)
   // ==========================================
   const gbForm = document.getElementById("guestbook-form");
   const gbNickname = document.getElementById("gb-nickname");
@@ -80,39 +80,74 @@ document.addEventListener("DOMContentLoaded", () => {
   const gbList = document.getElementById("guestbook-list");
   const gbCountText = document.getElementById("guestbook-count-text");
 
-  const STORAGE_KEY = "yeardayhour_guestbook_clean_v2";
+  let guestbookEntries = [];
 
-  function getGuestbookEntries() {
+  // Fetch Global Guestbook Entries from Server API
+  async function fetchGuestbook() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {}
-    return [];
+      const res = await fetch('/api/guestbook');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.entries) {
+          guestbookEntries = data.entries;
+          renderGuestbook();
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Guestbook API fetch fallback to local:", e);
+    }
   }
 
-  function saveGuestbookEntries(entries) {
+  // Add New Guestbook Entry
+  async function addGuestbook(nickname, password, message) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    } catch (e) {}
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nickname, password, message })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.entries) {
+          guestbookEntries = data.entries;
+          renderGuestbook();
+          return true;
+        }
+      }
+    } catch (e) {
+      console.error("Failed to post guestbook:", e);
+    }
+    return false;
   }
 
-  function deleteGuestbookEntry(id) {
-    const entries = getGuestbookEntries();
-    const targetIdx = entries.findIndex(e => e.id === id);
-    if (targetIdx === -1) return;
+  // Delete Guestbook Entry by Password
+  async function deleteGuestbookEntry(id) {
+    const target = guestbookEntries.find(e => e.id === id);
+    if (!target) return;
 
-    const entry = entries[targetIdx];
-    const inputPass = prompt(`[${entry.nickname}] 님의 방명록을 삭제하시겠습니까?\n작성할 때 설정한 비밀번호를 입력해 주세요:`);
+    const inputPass = prompt(`[${target.nickname}] 님의 방명록을 삭제하시겠습니까?\n작성할 때 설정한 비밀번호를 입력해 주세요:`);
+    if (inputPass === null || !inputPass.trim()) return;
 
-    if (inputPass === null) return; // Cancelled
+    try {
+      const res = await fetch(`/api/guestbook/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: inputPass.trim() })
+      });
 
-    if (inputPass.trim() === entry.password.trim()) {
-      entries.splice(targetIdx, 1);
-      saveGuestbookEntries(entries);
-      renderGuestbook();
-      alert("방명록이 정상적으로 삭제되었습니다.");
-    } else {
-      alert("비밀번호가 일치하지 않습니다!");
+      const data = await res.json();
+      if (res.ok && data.entries) {
+        guestbookEntries = data.entries;
+        renderGuestbook();
+        alert("방명록이 정상적으로 삭제되었습니다.");
+      } else {
+        alert(data.error || "비밀번호가 일치하지 않습니다.");
+      }
+    } catch (e) {
+      console.error("Failed to delete guestbook:", e);
+      alert("삭제 중 오류가 발생했습니다.");
     }
   }
 
@@ -123,19 +158,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderGuestbook() {
     if (!gbList) return;
-    const entries = getGuestbookEntries();
     gbList.innerHTML = "";
 
     if (gbCountText) {
-      gbCountText.innerText = `${entries.length} Messages`;
+      gbCountText.innerText = `${guestbookEntries.length} Messages`;
     }
 
-    if (entries.length === 0) {
+    if (guestbookEntries.length === 0) {
       gbList.innerHTML = '<div class="empty-gb-msg">아직 작성된 방명록이 없습니다. 첫 번째 메시지를 남겨보세요! ✨</div>';
       return;
     }
 
-    entries.forEach(entry => {
+    guestbookEntries.forEach(entry => {
       const card = document.createElement("div");
       card.className = "gb-card";
       
@@ -159,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (gbForm) {
-    gbForm.addEventListener("submit", (e) => {
+    gbForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const nickname = gbNickname.value.trim();
       const password = gbPassword.value.trim();
@@ -167,27 +201,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!nickname || !password || !message) return;
 
-      const entries = getGuestbookEntries();
-      const now = new Date();
-      const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      const newEntry = {
-        id: Date.now(),
-        nickname,
-        password,
-        message,
-        date: dateStr
-      };
-
-      entries.unshift(newEntry);
-      saveGuestbookEntries(entries);
-      renderGuestbook();
-
-      gbMessage.value = "";
-      gbPassword.value = "";
+      const success = await addGuestbook(nickname, password, message);
+      if (success) {
+        gbMessage.value = "";
+        gbPassword.value = "";
+      } else {
+        alert("방명록 등록 중 오류가 발생했습니다.");
+      }
     });
   }
 
-  // Initial render
-  renderGuestbook();
+  // Initial fetch from Server API
+  fetchGuestbook();
 });
