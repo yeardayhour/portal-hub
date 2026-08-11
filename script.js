@@ -15,12 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
     countText.innerText = `${config.services.length} Active`;
   }
 
-  // Clock Widget
+  // Clock Widget (Explicit KST Asia/Seoul)
   function updateClock() {
     const now = new Date();
     const clockEl = document.getElementById("clock-time");
     if (clockEl) {
-      clockEl.innerText = now.toLocaleTimeString('en-US', { hour12: false });
+      clockEl.innerText = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Seoul', hour12: false });
     }
   }
   setInterval(updateClock, 1000);

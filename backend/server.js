@@ -14,6 +14,17 @@ const DATA_FILE = path.join(__dirname, 'guestbook.json');
 app.use(cors());
 app.use(express.json());
 
+// KST (Korea Standard Time, Asia/Seoul UTC+9) Helper
+function getKSTDateString() {
+  const kstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+  const yyyy = kstNow.getFullYear();
+  const mm = String(kstNow.getMonth() + 1).padStart(2, '0');
+  const dd = String(kstNow.getDate()).padStart(2, '0');
+  const hh = String(kstNow.getHours()).padStart(2, '0');
+  const min = String(kstNow.getMinutes()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+}
+
 // Helper to read guestbook file
 function readGuestbookData() {
   try {
@@ -55,8 +66,7 @@ app.post('/api/guestbook', (req, res) => {
   }
 
   const entries = readGuestbookData();
-  const now = new Date();
-  const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const dateStr = getKSTDateString();
 
   const newEntry = {
     id: Date.now(),
@@ -69,7 +79,7 @@ app.post('/api/guestbook', (req, res) => {
   entries.unshift(newEntry);
   writeGuestbookData(entries);
 
-  console.log(`[Guestbook] New entry from ${newEntry.nickname}`);
+  console.log(`[Guestbook] New entry from ${newEntry.nickname} at ${dateStr} KST`);
 
   const safeEntries = entries.map(({ password, ...rest }) => rest);
   res.json({ success: true, entries: safeEntries });
@@ -105,5 +115,5 @@ app.delete('/api/guestbook/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`[Portal Hub] Guestbook Backend API running on port ${PORT}`);
+  console.log(`[Portal Hub] Guestbook Backend API running on port ${PORT} (KST Timezone Configured)`);
 });
