@@ -82,12 +82,18 @@ html, body {
   border: 1px solid var(--border-color);
 }
 
-/* Section Header */
+/* Section Header & Toggle Button */
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.25rem;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .section-header h2 {
@@ -105,12 +111,35 @@ html, body {
   border: 1px solid var(--border-color);
 }
 
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
 /* Services Row List Layout */
 .minimal-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   width: 100%;
+  transition: all 0.3s ease-out;
+}
+
+.minimal-list.collapsed {
+  display: none !important;
 }
 
 .service-row-item {

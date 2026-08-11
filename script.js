@@ -26,6 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateClock, 1000);
   updateClock();
 
+  // Toggle Fold/Unfold Services List
+  const toggleBtn = document.getElementById("toggle-services-btn");
+  const toggleText = document.getElementById("toggle-btn-text");
+
+  if (toggleBtn && servicesList) {
+    toggleBtn.addEventListener("click", () => {
+      const isCollapsed = servicesList.classList.toggle("collapsed");
+      if (toggleText) {
+        toggleText.innerText = isCollapsed ? "펼치기 🔽" : "접기 🔼";
+      }
+    });
+  }
+
   // Render Services Row List
   if (servicesList) {
     servicesList.innerHTML = "";
