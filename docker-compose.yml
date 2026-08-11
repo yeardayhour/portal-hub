@@ -21,3 +21,4 @@ services:
       - "8006:8006"
     volumes:
       - ./backend:/app
+      - /app/node_modules
