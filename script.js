@@ -26,6 +26,41 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateClock, 1000);
   updateClock();
 
+  // Kakao Share Portal Handler
+  const kakaoBtn = document.getElementById("kakao-share-portal-btn");
+  if (kakaoBtn) {
+    kakaoBtn.addEventListener("click", () => {
+      const shareUrl = "http://yeardayhour.duckdns.org/";
+      const KAKAO_JS_KEY = "5ac84d10d03c1b82c2bf07812a509c1b";
+
+      if (window.Kakao) {
+        if (!window.Kakao.isInitialized()) {
+          window.Kakao.init(KAKAO_JS_KEY);
+        }
+        try {
+          window.Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+              title: '🌐 yeardayhour.duckdns.org | 마이크로서비스 포털',
+              description: 'Champdle, Strike 3D, One Card, Pokemantle, LoLSearch 등 다양한 게임과 도구를 즐겨보세요!',
+              imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80',
+              link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+            },
+            buttons: [
+              { title: '🌐 포털 접속하기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }
+            ]
+          });
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      navigator.clipboard.writeText(`http://yeardayhour.duckdns.org/`);
+      alert("포털 주소가 클립보드에 복사되었습니다! 카카오톡에 바로 공유하세요!");
+    });
+  }
+
   // Toggle Fold/Unfold Services List
   const toggleBtn = document.getElementById("toggle-services-btn");
   const toggleText = document.getElementById("toggle-btn-text");
