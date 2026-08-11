@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const config = window.PORTAL_CONFIG || { services: [] };
   const cardsGrid = document.getElementById("cards-grid");
+  const countText = document.getElementById("service-count-text");
   
   // Host Detection
   let currentHost = window.location.hostname;
@@ -8,50 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!currentHost || currentHost === "" || currentHost === "null" || isFileProtocol) {
     currentHost = "localhost";
   }
-  const currentHostDisplay = document.getElementById("current-host-display");
-  if (currentHostDisplay) {
-    currentHostDisplay.innerText = `Host: ${currentHost}`;
+
+  // Update Service Count
+  if (countText && config.services) {
+    countText.innerText = `${config.services.length} Services`;
   }
 
   // Clock Widget
   function updateClock() {
     const now = new Date();
-    document.getElementById("clock-time").innerText = now.toLocaleTimeString('en-US', { hour12: false });
-    document.getElementById("clock-date").innerText = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const clockEl = document.getElementById("clock-time");
+    if (clockEl) {
+      clockEl.innerText = now.toLocaleTimeString('en-US', { hour12: false });
+    }
   }
   setInterval(updateClock, 1000);
   updateClock();
 
-  // Terminal Widget
-  const terminalLogs = [
-    "Checking Docker container health...",
-    "Champdle container: OK",
-    "Pokemantle container: OK",
-    "FastAPI Lab: Active",
-    "Routing traffic through NGINX proxy...",
-    "yeardayhour.duckdns.org is secure.",
-    "Loading One Card multiplayer sockets...",
-    "Ready for new connections."
-  ];
-  const termBody = document.getElementById("terminal-body");
-  let logIdx = 0;
-  setInterval(() => {
-    if (logIdx < terminalLogs.length) {
-      const line = document.createElement("div");
-      line.className = "term-line";
-      line.innerText = terminalLogs[logIdx];
-      termBody.appendChild(line);
-      termBody.scrollTop = termBody.scrollHeight;
-      logIdx++;
-    } else {
-      logIdx = 0;
-      termBody.innerHTML = '<div class="term-line">Log rotated.</div>';
-    }
-  }, 3500);
-
-  // Render Cards
+  // Render Minimal Cards
   if (cardsGrid) {
-    config.services.forEach((service, index) => {
+    cardsGrid.innerHTML = "";
+    config.services.forEach((service) => {
       let fullUrl = "#";
       let displayUrl = "";
 
@@ -64,8 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const card = document.createElement("a");
-      card.className = `service-card bento-item ${service.disabled ? "disabled" : ""}`;
-      card.style.animationDelay = `${index * 0.15}s`;
+      card.className = `service-card ${service.disabled ? "disabled" : ""}`;
       
       if (!service.disabled) {
         card.href = fullUrl;
