@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update Service Count
   if (countText && config.services) {
-    countText.innerText = `${config.services.length} Services`;
+    countText.innerText = `${config.services.length} Active`;
   }
 
   // Clock Widget
@@ -54,32 +54,32 @@ document.addEventListener("DOMContentLoaded", () => {
         displayUrl = service.port ? `${currentHost}:${service.port}` : `${currentHost}`;
       }
 
-      const row = document.createElement("a");
-      row.className = `service-row-item ${service.disabled ? "disabled" : ""}`;
+      const card = document.createElement("a");
+      card.className = `service-row-card ${service.disabled ? "disabled" : ""}`;
       
       if (!service.disabled) {
-        row.href = fullUrl;
-        row.target = "_blank";
-        row.rel = "noopener noreferrer";
+        card.href = fullUrl;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
       }
 
-      row.innerHTML = `
-        <div class="row-left">
-          <div class="row-icon">${service.icon || "💻"}</div>
-          <div class="row-info">
-            <div class="row-title-wrap">
-              <span class="row-title">${service.title}</span>
-              <span class="badge badge-${service.badgeColor || "purple"}">${service.badge || "Game"}</span>
+      card.innerHTML = `
+        <div class="card-left-group">
+          <div class="service-icon-box">${service.icon || "💻"}</div>
+          <div class="service-text-group">
+            <div class="service-title-row">
+              <span class="service-title-text">${service.title}</span>
+              <span class="category-badge badge-${service.badgeColor || "purple"}">${service.badge || "Game"}</span>
             </div>
-            <p class="row-desc">${service.description}</p>
+            <p class="service-desc-text">${service.description}</p>
           </div>
         </div>
-        <div class="row-right">
-          <span class="row-url">${service.disabled ? 'Coming soon...' : displayUrl}</span>
-          <i class="ph-bold ph-arrow-right arrow-icon"></i>
+        <div class="card-right-group">
+          <span class="service-url-text">${service.disabled ? 'Coming soon...' : displayUrl}</span>
+          <i class="ph-bold ph-arrow-right launch-arrow-icon"></i>
         </div>
       `;
-      servicesList.appendChild(row);
+      servicesList.appendChild(card);
     });
   }
 
@@ -178,27 +178,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (guestbookEntries.length === 0) {
-      gbList.innerHTML = '<div class="empty-gb-msg">아직 작성된 방명록이 없습니다. 첫 번째 메시지를 남겨보세요! ✨</div>';
+      gbList.innerHTML = '<div class="empty-gb-notice">아직 작성된 방명록이 없습니다. 첫 번째 메시지를 남겨보세요! ✨</div>';
       return;
     }
 
     guestbookEntries.forEach(entry => {
       const card = document.createElement("div");
-      card.className = "gb-card";
+      card.className = "gb-entry-card";
       
       const initial = (entry.nickname || "?").substring(0, 1).toUpperCase();
 
       card.innerHTML = `
-        <div class="gb-avatar">${initial}</div>
-        <div class="gb-content">
-          <div class="gb-header">
-            <div class="gb-name-box">
-              <span class="gb-name">${entry.nickname}</span>
-              <span class="gb-time">${entry.date}</span>
+        <div class="gb-author-avatar">${initial}</div>
+        <div class="gb-entry-body">
+          <div class="gb-entry-header">
+            <div class="flex items-center gap-2">
+              <span class="gb-author-name">${entry.nickname}</span>
+              <span class="gb-created-date">${entry.date}</span>
             </div>
-            <button class="gb-delete-btn" onclick="window.handleDeleteGuestbook(${entry.id})">삭제</button>
+            <button class="gb-delete-action-btn" onclick="window.handleDeleteGuestbook(${entry.id})">삭제</button>
           </div>
-          <p class="gb-text">${entry.message}</p>
+          <p class="gb-entry-message">${entry.message}</p>
         </div>
       `;
       gbList.appendChild(card);
