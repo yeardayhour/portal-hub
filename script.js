@@ -29,12 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Toggle Fold/Unfold Services List
   const toggleBtn = document.getElementById("toggle-services-btn");
   const toggleText = document.getElementById("toggle-btn-text");
+  const toggleIcon = document.getElementById("toggle-btn-icon");
 
   if (toggleBtn && servicesList) {
     toggleBtn.addEventListener("click", () => {
       const isCollapsed = servicesList.classList.toggle("collapsed");
       if (toggleText) {
-        toggleText.innerText = isCollapsed ? "펼치기 🔽" : "접기 🔼";
+        toggleText.innerText = isCollapsed ? "펼치기" : "접기";
+      }
+      if (toggleIcon) {
+        toggleIcon.className = isCollapsed ? "ph-bold ph-caret-down" : "ph-bold ph-caret-up";
       }
     });
   }
