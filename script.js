@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="row-info">
             <div class="row-title-wrap">
               <span class="row-title">${service.title}</span>
-              <span class="badge badge-${service.badgeColor || "cyan"}">${service.badge || "Service"}</span>
+              <span class="badge badge-${service.badgeColor || "purple"}">${service.badge || "Game"}</span>
             </div>
             <p class="row-desc">${service.description}</p>
           </div>
@@ -71,38 +71,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // Guestbook System (방명록 기능)
+  // Guestbook System (방명록 & 비밀번호 삭제 기능)
   // ==========================================
   const gbForm = document.getElementById("guestbook-form");
   const gbNickname = document.getElementById("gb-nickname");
+  const gbPassword = document.getElementById("gb-password");
   const gbMessage = document.getElementById("gb-message");
   const gbList = document.getElementById("guestbook-list");
   const gbCountText = document.getElementById("guestbook-count-text");
 
-  const STORAGE_KEY = "yeardayhour_guestbook_v1";
-
-  // Initial Sample Messages
-  const initialEntries = [
-    {
-      id: 1,
-      nickname: "yeardayhour",
-      message: "포탈에 오신 것을 환영합니다! 방명록을 자유롭게 작성해보세요 🚀",
-      date: "2026-08-11 20:00"
-    },
-    {
-      id: 2,
-      nickname: "스트라이커",
-      message: "Strike 3D 주사위 멀티플레이어 진짜 꿀잼이네요 🎲",
-      date: "2026-08-11 20:15"
-    }
-  ];
+  const STORAGE_KEY = "yeardayhour_guestbook_clean_v2";
 
   function getGuestbookEntries() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) return JSON.parse(saved);
     } catch (e) {}
-    return initialEntries;
+    return [];
   }
 
   function saveGuestbookEntries(entries) {
@@ -110,6 +95,31 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     } catch (e) {}
   }
+
+  function deleteGuestbookEntry(id) {
+    const entries = getGuestbookEntries();
+    const targetIdx = entries.findIndex(e => e.id === id);
+    if (targetIdx === -1) return;
+
+    const entry = entries[targetIdx];
+    const inputPass = prompt(`[${entry.nickname}] 님의 방명록을 삭제하시겠습니까?\n작성할 때 설정한 비밀번호를 입력해 주세요:`);
+
+    if (inputPass === null) return; // Cancelled
+
+    if (inputPass.trim() === entry.password.trim()) {
+      entries.splice(targetIdx, 1);
+      saveGuestbookEntries(entries);
+      renderGuestbook();
+      alert("방명록이 정상적으로 삭제되었습니다.");
+    } else {
+      alert("비밀번호가 일치하지 않습니다!");
+    }
+  }
+
+  // Global delegate handler for delete button
+  window.handleDeleteGuestbook = function(id) {
+    deleteGuestbookEntry(id);
+  };
 
   function renderGuestbook() {
     if (!gbList) return;
@@ -121,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (entries.length === 0) {
-      gbList.innerHTML = '<div class="gb-card text-center text-slate-500">첫 번째 방명록을 작성해보세요!</div>';
+      gbList.innerHTML = '<div class="empty-gb-msg">아직 작성된 방명록이 없습니다. 첫 번째 메시지를 남겨보세요! ✨</div>';
       return;
     }
 
@@ -135,8 +145,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="gb-avatar">${initial}</div>
         <div class="gb-content">
           <div class="gb-header">
-            <span class="gb-name">${entry.nickname}</span>
-            <span class="gb-time">${entry.date}</span>
+            <div class="gb-name-box">
+              <span class="gb-name">${entry.nickname}</span>
+              <span class="gb-time">${entry.date}</span>
+            </div>
+            <button class="gb-delete-btn" onclick="window.handleDeleteGuestbook(${entry.id})">삭제</button>
           </div>
           <p class="gb-text">${entry.message}</p>
         </div>
@@ -149,9 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
     gbForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const nickname = gbNickname.value.trim();
+      const password = gbPassword.value.trim();
       const message = gbMessage.value.trim();
 
-      if (!nickname || !message) return;
+      if (!nickname || !password || !message) return;
 
       const entries = getGuestbookEntries();
       const now = new Date();
@@ -160,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const newEntry = {
         id: Date.now(),
         nickname,
+        password,
         message,
         date: dateStr
       };
@@ -169,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       renderGuestbook();
 
       gbMessage.value = "";
+      gbPassword.value = "";
     });
   }
 

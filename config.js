@@ -4,22 +4,10 @@
  */
 const PORTAL_CONFIG = {
   defaultOciIp: "129.225.197.60",
-  title: "yeardayhour.hub",
-  subtitle: "Your ultimate playground on Oracle Cloud",
+  title: "http://yeardayhour.duckdns.org/",
+  subtitle: "Personal Microservices Portal",
 
   services: [
-    {
-      id: "oci-main",
-      title: "OCI Main Server",
-      category: "Infrastructure",
-      icon: "🌐",
-      description: "Oracle Cloud 인프라 메인 웹 서버 및 관리 도구",
-      port: 80,
-      protocol: "http",
-      badge: "Active",
-      badgeColor: "cyan",
-      tags: ["OCI", "Cloud", "Ubuntu"]
-    },
     {
       id: "champdle",
       title: "Champdle Game",
@@ -31,6 +19,18 @@ const PORTAL_CONFIG = {
       badge: "Game",
       badgeColor: "purple",
       tags: ["Nuxt.js", "FastAPI", "LoL"]
+    },
+    {
+      id: "strike",
+      title: "Strike Game",
+      category: "Web App",
+      icon: "🎲",
+      description: "주사위와 운으로 승부하는 짜릿한 스트라이크 보드게임 (3D & 실시간 멀티)",
+      path: "/strike/",
+      protocol: "http",
+      badge: "Game",
+      badgeColor: "purple",
+      tags: ["Vue3", "Socket.IO", "BoardGame"]
     },
     {
       id: "pokemantle",
@@ -45,30 +45,6 @@ const PORTAL_CONFIG = {
       tags: ["Nuxt.js", "FastAPI", "Vue3"]
     },
     {
-      id: "fastapi-lab",
-      title: "FastAPI Lab",
-      category: "Backend API",
-      icon: "⚡",
-      description: "FastAPI 비동기 백엔드 연습 및 API 서버 (80번 포트 Nginx 우회 연동)",
-      path: "/fastapi/",
-      protocol: "http",
-      badge: "Dev API",
-      badgeColor: "emerald",
-      tags: ["Python", "FastAPI", "Uvicorn"]
-    },
-    {
-      id: "strike",
-      title: "Strike Game",
-      category: "Web App",
-      icon: "🎲",
-      description: "주사위와 운으로 승부하는 짜릿한 스트라이크 보드게임 웹 이식판",
-      path: "/strike/",
-      protocol: "http",
-      badge: "Game",
-      badgeColor: "amber",
-      tags: ["Vue3", "Vite", "BoardGame"]
-    },
-    {
       id: "onecard",
       title: "One Card Online",
       category: "Web App",
@@ -76,8 +52,8 @@ const PORTAL_CONFIG = {
       description: "실시간 멀티플레이어 원카드 게임! 친구들과 방을 파서 대결해보세요.",
       path: "/onecard/",
       protocol: "http",
-      badge: "New Game",
-      badgeColor: "red",
+      badge: "Game",
+      badgeColor: "purple",
       tags: ["Vue3", "Socket.IO", "Multiplayer"]
     },
     {
@@ -91,6 +67,18 @@ const PORTAL_CONFIG = {
       badge: "Search",
       badgeColor: "cyan",
       tags: ["Express", "Riot API", "LoL"]
+    },
+    {
+      id: "fastapi-lab",
+      title: "FastAPI Lab",
+      category: "Backend API",
+      icon: "⚡",
+      description: "FastAPI 비동기 백엔드 연습 및 API 서버 (80번 포트 Nginx 연동)",
+      path: "/fastapi/",
+      protocol: "http",
+      badge: "Dev API",
+      badgeColor: "emerald",
+      tags: ["Python", "FastAPI", "Uvicorn"]
     }
   ]
 };
